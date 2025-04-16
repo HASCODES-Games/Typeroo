@@ -6,7 +6,7 @@ print(wordNumbers)
 wordNumbers = int(wordNumbers)
 w=1
 word_list = []
-while w<wordNumbers:
+while w<wordNumbers+1:
     word = input("Enter word " + str(w) + ": ")
     word_list.append(word)
     w=w+1
