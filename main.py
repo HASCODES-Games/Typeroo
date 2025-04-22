@@ -1,105 +1,95 @@
-import time, pygame as pg, random, math
+import time
+import random
+import os
+from tkinter import Tk, filedialog
+from tkinter.messagebox import showinfo
 
-# Global variables to store test settings between runs
-word_list = []
-current_word_list = []
-wordNumbers = 0
-randomizeWords = False
-timeTest = False
+def select_file():
+    root = Tk()
+    root.withdraw()  # Hide the main window
+    root.attributes('-topmost', True)  # Bring dialog to front
+    
+    file_path = filedialog.askopenfilename(
+        title="Select a text file with words",
+        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+    )
+    
+    if file_path:
+        with open(file_path, 'r') as file:
+            words = [line.strip() for line in file if line.strip()]
+        return words
+    return None
+
+def get_words_from_file():
+    print("\nPlease select a text file using the file dialog...")
+    words = select_file()
+    while not words:
+        print("No file selected or file was empty. Please try again.")
+        words = select_file()
+    return words
+
+def get_words_manually():
+    wordNumbers = int(input("Enter the number of words to be displayed: "))
+    print(wordNumbers)
+    words = []
+    for w in range(1, wordNumbers + 1):
+        word = input(f"Enter word {w}: ")
+        words.append(word)
+    return words
 
 def run_test(new_test=True):
     global word_list, current_word_list, wordNumbers, randomizeWords, timeTest
     
     if new_test:
-        # Setup word list
-        wordNumbers = input("Enter the number of words to be displayed: ")
-        print(wordNumbers)
-        wordNumbers = int(wordNumbers)
-        w = 1
-        word_list = []
-        while w < wordNumbers + 1:
-            word = input("Enter word " + str(w) + ": ")
-            word_list.append(word)
-            w = w + 1
-
-        # Setup game settings
-        randomizeWords = input("Would you like to randomize the order of the words? (y/n): ").lower()
-        if randomizeWords == "y":
-            randomizeWords = True
-        elif randomizeWords == "n":
-            randomizeWords = False
-        else:  
-            print("Invalid input, defaulting to no randomization.")
-            randomizeWords = False
-
-        timeTest = input("Would you like to record the time taken for the test? (y/n): ").lower()
-        if timeTest == "y":
-            timeTest = True
-        elif timeTest == "n":
-            timeTest = False
+        print("\nWord input options:")
+        print("1. Select a text file from your computer")
+        print("2. Enter words manually")
+        choice = input("Choose input method (1-2): ").strip()
+        
+        if choice == "1":
+            word_list = get_words_from_file()
+        elif choice == "2":
+            word_list = get_words_manually()
         else:
-            print("Invalid input, defaulting to no time recording.")
-            timeTest = False
+            print("Invalid choice, defaulting to manual entry.")
+            word_list = get_words_manually()
+        
+        wordNumbers = len(word_list)
+        randomizeWords = input("Randomize word order? (y/n): ").lower() == 'y'
+        timeTest = input("Record time taken? (y/n): ").lower() == 'y'
 
-    # Initialize stopwatch variables
-    start_time = 0
-    end_time = 0
+    start_time = time.time() if timeTest else 0
+    current_word_list = random.sample(word_list, len(word_list)) if randomizeWords else word_list.copy()
 
-    if timeTest:
-        print("\nTest starting now...")
-        start_time = time.time()
-
-    if randomizeWords or not new_test:  # Randomize if requested or repeating test
-        current_word_list = random.sample(word_list, len(word_list))
-    else:
-        current_word_list = word_list.copy()
-
-    w = 0
     correct = 0
-    while w < wordNumbers:
-        print("\n" + current_word_list[w] + "\n")
-        wordWrite = input()
-        print(wordWrite)
-        if wordWrite == current_word_list[w]:
-            print("\nCorrect!")
+    for i, word in enumerate(current_word_list, 1):
+        print(f"\nWord {i}/{wordNumbers}: {word}\n")
+        if input("Type the word: ") == word:
+            print("Correct!")
             correct += 1
         else:
-            print("\nIncorrect!")
-        w = w + 1
+            print("Incorrect!")
 
     print("\nTest over.")
-    print(f"You got {correct} out of {wordNumbers} correct.")
-    accuracy = (correct / wordNumbers) * 100
-    print(f"Accuracy: {accuracy:.2f}%")
-
+    print(f"Score: {correct}/{wordNumbers} ({correct/wordNumbers:.0%})")
     if timeTest:
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-        print(f"Total time taken: {elapsed_time:.2f} seconds")
+        print(f"Time: {time.time()-start_time:.2f}s")
 
 # Main game loop
 while True:
     run_test()
     
     while True:
-        print("\nWould you like to:")
-        print("1. Play this test again")
-        print("2. Start a new test")
+        print("\nOptions:")
+        print("1. Repeat same test")
+        print("2. New test")
         print("3. Exit")
-        choice = input("Enter your choice (1-3): ").strip()
+        choice = input("Choose (1-3): ").strip()
         
         if choice == "1":
-            print("Repeating test...")
-            time.sleep(1)
-            run_test(new_test=False)
+            word_list = get_words_from_file()
         elif choice == "2":
-            print("Starting new test...")
-            time.sleep(1)
-            break  # Breaks out of inner loop to start new test
-        elif choice == "3":
-            print("Exiting...")
-            time.sleep(1)
-            exit()
+            word_list = get_words_manually()
         else:
-            print("Invalid input, please try again.")
-            continue
+            print("Invalid choice, defaulting to manual entry.")
+            word_list = get_words_manually()
