@@ -85,6 +85,7 @@ while True:
         print("2. New test")
         print("3. Exit")
         choice = input("Choose (1-3): ").strip()
+        print(choice)
         
         if choice == "1":
             word_list = get_words_from_file()
