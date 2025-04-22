@@ -91,7 +91,7 @@ while True:
             word_list = get_words_from_file()
         elif choice == "2":
             word_list = get_words_manually()
-        elif choice == "3"
+        elif choice == "3":
             quit()
         else:
             print("Invalid choice, defaulting to manual entry.")
