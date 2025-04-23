@@ -16,3 +16,7 @@ More coming soon, as right now we're lacking features.
 - Blind mode (can't see if you got a word right or wrong)
 - Accuracy counter
 - Words Per Minute (WPM) counter
+
+# Contributers
+- Me (of course)
+- Danester68
