@@ -17,6 +17,8 @@ More coming soon, as right now we're lacking features.
 - Accuracy counter
 - Words Per Minute (WPM) counter
 
-# Contributers
-- Me (of course)
-- Danester68
+# Coming Soon
+- Application mode (not in terminal)
+- Better way to change settings
+- UI and better layout
+- Sound on click
