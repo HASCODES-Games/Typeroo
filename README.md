@@ -16,6 +16,8 @@ More coming soon, as right now we're lacking features.
 - Blind mode (can't see if you got a word right or wrong)
 - Accuracy counter
 - Words Per Minute (WPM) counter
+- Multiple menus
+- Test repetition options
 
 # Coming Soon
 - Application mode (not in terminal)
